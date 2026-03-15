@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AI 가이드 - 인공지능이 추천하는 나만의 스마트 여행 일정. 여행지, 인원, 스타일을 입력하면 AI가 완벽한 여행 코스를 짜드려요.">
+<meta name="keywords" content="AI 여행, 여행 일정 추천, 스마트 여행, 여행 가이드, 해외여행, 국내여행, 여행 코스">
+<meta property="og:title" content="AI 가이드 - 스마트 여행 일정 추천">
+<meta property="og:description" content="AI가 나에게 딱 맞는 여행 코스를 추천해드려요 ✈️">
+<meta property="og:type" content="website">
+<title>AI 가이드 ✈️ 스마트 여행 일정 추천</title>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sky: #0ea5e9;
+    --sky-dark: #0369a1;
+    --sky-light: #e0f2fe;
+    --coral: #fb923c;
+    --sand: #fef3c7;
+    --white: #ffffff;
+    --text: #0c1f2e;
+    --text-muted: #5a7a94;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Pretendard', sans-serif;
+    background: #f0f9ff;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #0ea5e9 0%, #0369a1 50%, #075985 100%);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px 80px;
+    overflow: hidden;
+  }
+
+  /* 물결 배경 */
+  .hero::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 120px;
+    background: #f0f9ff;
+    clip-path: ellipse(60% 100% at 50% 100%);
+  }
+
+  /* 원형 광선 */
+  .hero-glow {
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* 떠다니는 구름 */
+  .cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50px;
+    animation: float linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+  }
+  .c1 { width:120px; height:40px; top:15%; left:-140px; animation-duration:18s; animation-delay:0s; }
+  .c1::before { width:60px; height:50px; top:-20px; left:20px; }
+  .c1::after  { width:40px; height:35px; top:-12px; left:60px; }
+  .c2 { width:80px; height:28px; top:35%; left:-100px; animation-duration:24s; animation-delay:-8s; }
+  .c2::before { width:40px; height:36px; top:-14px; left:12px; }
+  .c3 { width:160px; height:50px; top:60%; left:-180px; animation-duration:20s; animation-delay:-4s; }
+  .c3::before { width:70px; height:60px; top:-24px; left:28px; }
+  .c3::after  { width:50px; height:44px; top:-16px; left:80px; }
+
+  @keyframes float {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(100vw + 200px)); }
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 99px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 10vw, 80px);
+    color: white;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero-title span {
+    color: #fde68a;
+  }
+
+  .hero-sub {
+    font-size: clamp(15px, 3vw, 18px);
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: var(--sky-dark);
+    font-size: 17px;
+    font-weight: 700;
+    padding: 18px 40px;
+    border-radius: 99px;
+    text-decoration: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.6s 0.3s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 28px 70px rgba(0,0,0,0.28);
+  }
+
+  .hero-btn .arrow {
+    font-size: 20px;
+    transition: transform 0.2s;
+  }
+  .hero-btn:hover .arrow { transform: translateX(4px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+  .scroll-dot {
+    width: 6px; height: 6px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── FEATURES ── */
+  .section {
+    padding: 80px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    text-align: center;
+    color: var(--text);
+    margin-bottom: 48px;
+    line-height: 1.25;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .feature-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 24px rgba(14,165,233,0.08);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--sky), var(--coral));
+  }
+  .feature-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(14,165,233,0.15);
+  }
+
+  .feature-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .feature-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how {
+    background: white;
+    padding: 80px 24px;
+  }
+
+  .steps {
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .step {
+    display: flex;
+    gap: 24px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 52px;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--sky-light), transparent);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, var(--sky), var(--sky-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(14,165,233,0.3);
+  }
+
+  .step-content {
+    padding-bottom: 36px;
+  }
+
+  .step-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    background: linear-gradient(135deg, #0ea5e9, #0369a1);
+    padding: 80px 24px;
+    text-align: center;
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 6vw, 44px);
+    color: white;
+    margin-bottom: 16px;
+  }
+
+  .cta-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 36px;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: var(--sky-dark);
+    font-size: 17px;
+    font-weight: 700;
+    padding: 18px 40px;
+    border-radius: 99px;
+    text-decoration: none;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 28px 70px rgba(0,0,0,0.28);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 13px;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 480px) {
+    .features { grid-template-columns: 1fr; }
+    .hero-btn, .cta-btn { width: 100%; justify-content: center; max-width: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <div class="hero-badge">✈️ AI 여행 플래너</div>
+  <h1 class="hero-title">나만의 완벽한<br><span>여행 일정</span></h1>
+  <p class="hero-sub">여행지, 인원, 스타일만 입력하면<br>AI가 날짜별 최적 코스를 추천해드려요</p>
+  <a href="https://script.google.com/macros/s/AKfycbwqei4i9EpS9dUypdYb047RDY_0i1NBwKd-FEL-8xzC1TkZpDc9bml9ehZi45TMZyn_uQ/exec" class="hero-btn">
+    여행 일정 추천받기 <span class="arrow">→</span>
+  </a>
+
+  <div class="hero-scroll">
+    <span>스크롤</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <p class="section-label">Features</p>
+  <h2 class="section-title">이런 기능이 있어요</h2>
+  <div class="features">
+    <div class="feature-card">
+      <span class="feature-icon">🗺️</span>
+      <div class="feature-title">AI 일정 추천</div>
+      <div class="feature-desc">여행 스타일, 예산, 인원에 맞춰 날짜별 최적의 여행 코스를 자동으로 짜드려요.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🌤️</span>
+      <div class="feature-title">실시간 날씨</div>
+      <div class="feature-desc">여행지의 현재 날씨를 실시간으로 확인하고 준비물을 미리 챙겨보세요.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💱</span>
+      <div class="feature-title">환율 계산기</div>
+      <div class="feature-desc">8개 주요 통화 실시간 환율로 현지에서 쓸 예산을 정확하게 계산해요.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">✈️</span>
+      <div class="feature-title">항공권 검색</div>
+      <div class="feature-desc">스카이스캐너, 네이버, 카카오 등 주요 항공권 사이트로 바로 연결돼요.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📍</span>
+      <div class="feature-title">여행 지도</div>
+      <div class="feature-desc">추천 장소들을 지도에서 한눈에 보고 동선을 바로 확인할 수 있어요.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📄</span>
+      <div class="feature-title">PDF 저장</div>
+      <div class="feature-desc">완성된 여행 일정을 PDF로 저장해서 오프라인에서도 확인하세요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <div style="max-width:900px; margin:0 auto;">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">사용 방법</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">여행 정보 입력</div>
+          <div class="step-desc">여행지, 인원수, 나이, 여행 스타일, 일수, 예산을 선택해요.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">AI 추천 받기</div>
+          <div class="step-desc">버튼 하나로 AI가 날짜별 최적의 여행 코스를 짜드려요.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">일정 확인 & 공유</div>
+          <div class="step-desc">지도에서 동선 확인하고, 친구에게 공유하거나 PDF로 저장하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <h2 class="cta-title">지금 바로 시작해보세요 🌊</h2>
+  <p class="cta-sub">무료로 나만의 여행 일정을 받아보세요</p>
+  <a href="https://script.google.com/macros/s/AKfycbwqei4i9EpS9dUypdYb047RDY_0i1NBwKd-FEL-8xzC1TkZpDc9bml9ehZi45TMZyn_uQ/exec" class="cta-btn">
+    여행 일정 추천받기 ✈️
+  </a>
+</section>
+
+<footer>
+  © 2026 AI 가이드 · 스마트 여행 일정 추천
+</footer>
+
+</body>
+</html>
